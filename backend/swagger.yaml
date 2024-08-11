@@ -1,0 +1,238 @@
+openapi: 3.0.0
+info:
+  title: Student Assignment Management API
+  description: API for managing student assignments with authentication.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum:
+            - teacher
+            - student
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date-time
+        teacherId:
+          type: integer
+        totalScore:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/login:
+    post:
+      summary: user login and copy jwtToken from response and paste in authorize section
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+        "400":
+          description: User not found or wrong password
+        "500":
+          description: Internal server error
+
+  /auth/register:
+    post:
+      summary: User registration and copy jwtToken from response and paste in authorize section, try to enter your original email so that a new assignment can be sent to you when it is created
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                role:
+                  type: string
+                  enum:
+                    - teacher or student
+
+      responses:
+        "201":
+          description: User created successfully
+        "500":
+          description: Internal server error
+
+  /auth/users:
+    get:
+      summary: Retrieve all users
+      tags:
+        - Authentication
+      responses:
+        "200":
+          description: List of users
+        "500":
+          description: Internal server error
+
+  /assignments:
+    get:
+      summary: Retrieve all assignments
+      tags:
+        - Assignments
+      responses:
+        "200":
+          description: List of assignments
+        "500":
+          description: Internal server error
+    post:
+      summary: Create a new assignment, here only teacher can create a assignment
+      tags:
+        - Assignments
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                dueDate:
+                  type: string
+                  format: date-time
+                totalScore:
+                  type: integer
+      responses:
+        "201":
+          description: Assignment created
+        "400":
+          description: Invalid details
+        "500":
+          description: Internal server error
+
+  /update-assignment/{assignmentId}:
+    put:
+      summary: Update an assignment, only teacher can update an assignment
+      tags:
+        - Assignments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                dueDate:
+                  type: string
+                  format: date-time
+                totalScore:
+                  type: integer
+      responses:
+        "200":
+          description: Assignment updated
+        "400":
+          description: Unauthorized update request
+        "404":
+          description: Assignment not found
+        "500":
+          description: Internal server error
+
+  /delete-assignment/{assignmentId}:
+    delete:
+      summary: Delete an assignment, only teacher can delete.
+      tags:
+        - Assignments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: assignmentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Assignment deleted
+        "400":
+          description: Unauthorized delete request
+        "404":
+          description: Assignment not found
+        "500":
+          description: Internal server error
+
+  /teacher-assignments/{teacherId}:
+    get:
+      summary: Retrieve assignments created by a teacher
+      tags:
+        - Assignments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: teacherId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of teacher's assignments
+        "500":
+          description: Internal server error
