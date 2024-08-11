@@ -30,8 +30,8 @@ This project is a Node.js and Express-based API for managing student assignments
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/assignment-management-api.git
-   cd assignment-management-api
+   git clone https://github.com/SSC369/playpower-backend-assignment.git
+   cd playpower-backend-assignment/backend
    ```
 
 2. **Install dependencies:**
@@ -84,7 +84,7 @@ To deploy this project using Docker, follow the steps below:
 FROM node:14
 
 # Set environment variables
-ENV EMAIL_USER=your_gmail.com
+ENV EMAIL_USER=your_email@gmail.com
 ENV EMAIL_PASS=your_gmail_app_password
 ENV JWT_SECRET=your_jwt_secret
 
@@ -125,10 +125,30 @@ docker run -p 3000:3000 -d assignment-management-api
 
 This will start the application in a Docker container, and it will be accessible on `http://localhost:3000`.
 
-## License
+### 4. Push Docker Image to Docker Hub
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+To push your Docker image to Docker Hub, follow these steps:
 
----
+1. **Log in to Docker Hub:**
 
-Feel free to customize this README to fit your project's specifics.
+   ```bash
+   docker login
+   ```
+
+   Enter your Docker Hub username and password when prompted.
+
+2. **Tag your Docker image:**
+   Replace `your_dockerhub_username` with your Docker Hub username.
+
+   ```bash
+   docker tag assignment-management-api your_dockerhub_username/assignment-management-api:latest
+   ```
+
+3. **Push the Docker image to Docker Hub:**
+
+   ```bash
+   docker push your_dockerhub_username/assignment-management-api:latest
+   ```
+
+4. **Verify the Push:**
+   You can verify that the image is successfully pushed by visiting your Docker Hub repository.
