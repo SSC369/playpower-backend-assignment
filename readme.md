@@ -4,6 +4,14 @@
 
 This project is a Node.js and Express-based API for managing student assignments. It includes features like user authentication, assignment creation, retrieval, updating, and deletion. The project uses SQLite as the database and JWT for authentication.
 
+## Hosted Link
+
+https://playpower-backend.onrender.com
+
+## Drive link of zip code and demonstration of project
+
+https://drive.google.com/drive/u/1/folders/1QC7xWd6giTtTNdvMLkj3qwF_9LPq1QFm
+
 ## Features
 
 - **User Authentication**: Users can register, log in, and retrieve user data.
