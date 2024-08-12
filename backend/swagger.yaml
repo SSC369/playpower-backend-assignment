@@ -4,7 +4,7 @@ info:
   description: API for managing student assignments with authentication.
   version: 1.0.0
 servers:
-  - url: http://localhost:3000/api
+  - url: https://playpower-backend.onrender.com/api
     description: Local server
 
 components:
